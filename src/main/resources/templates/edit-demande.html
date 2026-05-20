@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>edit</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
+
+<h2>Edit Demande</h2>
+
 <form action="/demandes/save" method="post">
 
     <input type="hidden" name="id" th:value="${demande.id}">
 
-    <input type="text" name="description" th:value="${demande.description}">
+    <label>Description:</label>
+    <input type="text" name="description" th:value="${demande.description}"><br><br>
+
+    <label>Status:</label>
+    <select name="status">
+        <option value="RECU">RECU</option>
+        <option value="DIAGNOSTIC">DIAGNOSTIC</option>
+        <option value="EN_REPARATION">EN_REPARATION</option>
+        <option value="TERMINE">TERMINE</option>
+        <option value="LIVRE">LIVRE</option>
+    </select><br><br>
 
     <button type="submit">Update</button>
 

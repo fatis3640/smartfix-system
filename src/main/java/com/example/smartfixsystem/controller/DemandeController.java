@@ -40,13 +40,30 @@ public class DemandeController {
     public String showForm() {
         return "add-demande";
     }
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        service.delete(id);
+        return "redirect:/demandes";
+    }
 
     // حفظ البيانات
     @PostMapping("/save")
-    public String save(@RequestParam String description,
+    public String save(@RequestParam(required = false) Long id,
+                       @RequestParam String description,
                        @RequestParam String status) {
 
-        Demande d = new Demande();
+        Demande d;
+
+        if (id != null) {
+            d = service.getAll()
+                    .stream()
+                    .filter(x -> x.getId().equals(id))
+                    .findFirst()
+                    .orElse(new Demande());
+        } else {
+            d = new Demande();
+        }
+
         d.setDescription(description);
         d.setStatus(Status.valueOf(status));
 
