@@ -1,11 +1,15 @@
 package com.example.smartfixsystem.controller;
 
+import com.example.smartfixsystem.entity.Appareil;
 import com.example.smartfixsystem.entity.Demande;
 import com.example.smartfixsystem.entity.Status;
+import com.example.smartfixsystem.entity.Technicien;
 import com.example.smartfixsystem.service.DemandeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/demandes")
@@ -50,25 +54,40 @@ public class DemandeController {
     @PostMapping("/save")
     public String save(@RequestParam(required = false) Long id,
                        @RequestParam String description,
-                       @RequestParam String status) {
+                       @RequestParam String status,
+                       @RequestParam(required = false) Long technicienId,
+                       @RequestParam(required = false) Long appareilId) {
 
-        Demande d;
-
-        if (id != null) {
-            d = service.getAll()
-                    .stream()
-                    .filter(x -> x.getId().equals(id))
-                    .findFirst()
-                    .orElse(new Demande());
-        } else {
-            d = new Demande();
-        }
+        Demande d = (id != null) ?
+                service.getAll().stream().filter(x -> x.getId().equals(id)).findFirst().orElse(new Demande())
+                : new Demande();
 
         d.setDescription(description);
         d.setStatus(Status.valueOf(status));
 
+        if (technicienId != null) {
+            Technicien t = new Technicien();
+            t.setId(technicienId);
+            d.setTechnicien(t);
+        }
+
+        if (appareilId != null) {
+            Appareil a = new Appareil();
+            a.setId(appareilId);
+            d.setAppareil(a);
+        }
+
         service.save(d);
 
         return "redirect:/demandes";
+    }
+    @GetMapping("/search")
+    public String search(@RequestParam String status, Model model) {
+
+        List<Demande> list = service.getByStatus(Status.valueOf(status));
+
+        model.addAttribute("demandes", list);
+
+        return "demandes";
     }
 }

@@ -7,6 +7,17 @@
 
 <h1>Liste des Demandes</h1>
 <a href="/demandes/add">Ajouter Demande</a>
+<form action="/demandes/search" method="get">
+    <select name="status">
+        <option value="RECU">RECU</option>
+        <option value="DIAGNOSTIC">DIAGNOSTIC</option>
+        <option value="EN_REPARATION">EN_REPARATION</option>
+        <option value="TERMINE">TERMINE</option>
+        <option value="LIVRE">LIVRE</option>
+    </select>
+
+    <button type="submit">Search</button>
+</form>
 
 <table border="1">
     <tr>
@@ -23,6 +34,8 @@
         <td th:text="${d.id}"></td>
         <td th:text="${d.description}"></td>
         <td th:text="${d.status}"></td>
+        <td th:text="${d.technicien != null ? d.technicien.id : 'null'}"></td>
+        <td th:text="${d.appareil != null ? d.appareil.id : 'null'}"></td>
     </tr>
 </table>
 
