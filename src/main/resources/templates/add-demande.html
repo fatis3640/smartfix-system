@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ajouter Demande</title>
+</head>
+<body>
+
+<h2>Ajouter une Demande</h2>
+
+<form action="/demandes/save" method="post">
+
+  <label>Description:</label>
+  <input type="text" name="description" required><br><br>
+
+  <label>Status:</label>
+  <select name="status">
+    <option value="RECU">RECU</option>
+    <option value="DIAGNOSTIC">DIAGNOSTIC</option>
+    <option value="EN_REPARATION">EN_REPARATION</option>
+    <option value="TERMINE">TERMINE</option>
+    <option value="LIVRE">LIVRE</option>
+  </select><br><br>
+
+  <button type="submit">Save</button>
+
+</form>
+
+</body>
+</html>

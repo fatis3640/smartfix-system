@@ -6,6 +6,7 @@
 <body>
 
 <h1>Liste des Demandes</h1>
+<a href="/demandes/add">Ajouter Demande</a>
 
 <table border="1">
     <tr>
@@ -15,6 +16,10 @@
     </tr>
 
     <tr th:each="d : ${demandes}">
+        <td>
+            <a th:href="@{'/demandes/edit/' + ${d.id}}">Edit</a>
+            <a th:href="@{'/demandes/delete/' + ${d.id}}">Delete</a>
+        </td>
         <td th:text="${d.id}"></td>
         <td th:text="${d.description}"></td>
         <td th:text="${d.status}"></td>
