@@ -26,4 +26,7 @@ public class TechnicienService {
     public void delete(Long id) {
         repo.deleteById(id);
     }
+    public Technicien getById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 }

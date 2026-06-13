@@ -4,7 +4,11 @@ import com.example.smartfixsystem.entity.Appareil;
 import com.example.smartfixsystem.entity.Demande;
 import com.example.smartfixsystem.entity.Status;
 import com.example.smartfixsystem.entity.Technicien;
+
+import com.example.smartfixsystem.service.AppareilService;
 import com.example.smartfixsystem.service.DemandeService;
+import com.example.smartfixsystem.service.TechnicienService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +20,17 @@ import java.util.List;
 public class DemandeController {
 
     private final DemandeService service;
+    private final TechnicienService technicienService;
+    private final AppareilService appareilService;
 
-    public DemandeController(DemandeService service) {
+    public DemandeController(
+            DemandeService service,
+            TechnicienService technicienService,
+            AppareilService appareilService) {
+
         this.service = service;
+        this.technicienService = technicienService;
+        this.appareilService = appareilService;
     }
 
     @GetMapping
@@ -26,6 +38,7 @@ public class DemandeController {
         model.addAttribute("demandes", service.getAll());
         return "demandes";
     }
+
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
 
@@ -36,26 +49,30 @@ public class DemandeController {
                 .orElse(null);
 
         model.addAttribute("demande", d);
+        model.addAttribute("techniciens", technicienService.getAll());
+        model.addAttribute("appareils", appareilService.getAll());
+        model.addAttribute("statuses", Status.values());
 
         return "edit-demande";
     }
-    // عرض الفورم
+
     @GetMapping("/add")
     public String showForm(Model model) {
 
         model.addAttribute("demande", new Demande());
-
+        model.addAttribute("techniciens", technicienService.getAll());
+        model.addAttribute("appareils", appareilService.getAll());
         model.addAttribute("statuses", Status.values());
 
         return "add-demande";
     }
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         service.delete(id);
         return "redirect:/demandes";
     }
 
-    // حفظ البيانات
     @PostMapping("/save")
     public String save(@RequestParam(required = false) Long id,
                        @RequestParam String description,
@@ -63,29 +80,30 @@ public class DemandeController {
                        @RequestParam(required = false) Long technicienId,
                        @RequestParam(required = false) Long appareilId) {
 
-        Demande d = (id != null) ?
-                service.getAll().stream().filter(x -> x.getId().equals(id)).findFirst().orElse(new Demande())
+        Demande d = (id != null)
+                ? service.getAll()
+                .stream()
+                .filter(x -> x.getId().equals(id))
+                .findFirst()
+                .orElse(new Demande())
                 : new Demande();
 
         d.setDescription(description);
         d.setStatus(Status.valueOf(status));
 
         if (technicienId != null) {
-            Technicien t = new Technicien();
-            t.setId(technicienId);
-            d.setTechnicien(t);
+            d.setTechnicien(technicienService.getById(technicienId));
         }
 
         if (appareilId != null) {
-            Appareil a = new Appareil();
-            a.setId(appareilId);
-            d.setAppareil(a);
+            d.setAppareil(appareilService.getById(appareilId));
         }
 
         service.save(d);
 
         return "redirect:/demandes";
     }
+
     @GetMapping("/search")
     public String search(@RequestParam String status, Model model) {
 

@@ -19,28 +19,21 @@
 
     <div class="card-body">
 
-      <form th:action="@{/demandes/save}"
-            th:object="${demande}"
-            method="post">
+      <form action="/demandes/save" method="post">
 
         <div class="mb-3">
-          <label class="form-label">
-            Description
-          </label>
+          <label class="form-label">Description</label>
 
           <input type="text"
+                 name="description"
                  class="form-control"
-                 th:field="*{description}"
                  required>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">
-            Status
-          </label>
+          <label class="form-label">Status</label>
 
-          <select class="form-select"
-                  th:field="*{status}">
+          <select name="status" class="form-select">
 
             <option th:each="s : ${statuses}"
                     th:value="${s}"
@@ -51,12 +44,11 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">
-            Technicien
-          </label>
+          <label class="form-label">Technicien</label>
 
-          <select class="form-select"
-                  th:field="*{technicien}">
+          <select name="technicienId" class="form-select">
+
+            <option value="">Select Technicien</option>
 
             <option th:each="t : ${techniciens}"
                     th:value="${t.id}"
@@ -67,12 +59,11 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">
-            Appareil
-          </label>
+          <label class="form-label">Appareil</label>
 
-          <select class="form-select"
-                  th:field="*{appareil}">
+          <select name="appareilId" class="form-select">
+
+            <option value="">Select Appareil</option>
 
             <option th:each="a : ${appareils}"
                     th:value="${a.id}"
@@ -82,13 +73,11 @@
           </select>
         </div>
 
-        <button type="submit"
-                class="btn btn-success">
+        <button type="submit" class="btn btn-success">
           Save
         </button>
 
-        <a href="/demandes"
-           class="btn btn-secondary">
+        <a href="/demandes" class="btn btn-secondary">
           Back
         </a>
 
