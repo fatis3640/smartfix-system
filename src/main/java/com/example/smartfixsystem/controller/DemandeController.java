@@ -41,7 +41,12 @@ public class DemandeController {
     }
     // عرض الفورم
     @GetMapping("/add")
-    public String showForm() {
+    public String showForm(Model model) {
+
+        model.addAttribute("demande", new Demande());
+
+        model.addAttribute("statuses", Status.values());
+
         return "add-demande";
     }
     @GetMapping("/delete/{id}")

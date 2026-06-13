@@ -6,6 +6,7 @@ import com.example.smartfixsystem.repository.DemandeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DemandeService {
@@ -20,8 +21,8 @@ public class DemandeService {
         return repo.findAll();
     }
 
-    public Demande save(Demande d) {
-        return repo.save(d);
+    public Demande save(Demande demande) {
+        return repo.save(demande);
     }
 
     public void delete(Long id) {
@@ -30,5 +31,10 @@ public class DemandeService {
 
     public List<Demande> getByStatus(Status status) {
         return repo.findByStatus(status);
+    }
+
+    public Demande getById(Long id) {
+        Optional<Demande> demande = repo.findById(id);
+        return demande.orElse(null);
     }
 }
